@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>BIBD</title>
+    <link rel="stylesheet" href="./dist/output.css">
+    <style>
+        :root {
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-right: env(safe-area-inset-right, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-left: env(safe-area-inset-left, 0px);
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
+        html {
+            overflow-x: hidden;
+        }
+
+        body {
+            margin: 0;
+            background: linear-gradient(145deg, #fff8fb, #fff0f6 54%, #ffe1ec);
+            overflow-x: hidden;
+            overflow-x: clip;
+        }
+
+        main {
+            box-sizing: border-box;
+            min-height: 100vh;
+            min-height: 100svh;
+            padding: max(16px, var(--safe-top)) max(16px, var(--safe-right)) max(16px, var(--safe-bottom)) max(16px, var(--safe-left));
+        }
+
+        .proposal-panel {
+            box-sizing: border-box;
+            height: auto;
+            padding: 24px;
+        }
+
+        .proposal-heart {
+            width: 68px;
+            height: 68px;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(216, 61, 123, 0.22);
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.78);
+            box-shadow: 0 12px 30px rgba(216, 61, 123, 0.12);
+            color: #d83d7b;
+            font-size: 2rem;
+            animation: heartBeat 2.4s ease-in-out infinite;
+        }
+
+        .proposal-eyebrow {
+            margin: 0;
+            color: #b94a75;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .proposal-title {
+            max-width: 100%;
+            margin: 0;
+            color: #d83d7b;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 2.5rem;
+            line-height: 1.15;
+            overflow-wrap: break-word;
+        }
+
+        .proposal-question {
+            max-width: 100%;
+            margin: 0;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .plea-message {
+            width: min(100%, 32rem);
+            min-height: 2.8em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            color: #b63368;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 1rem;
+            line-height: 1.4;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 180ms ease;
+        }
+
+        .plea-message.visible {
+            opacity: 1;
+        }
+
+        .proposal-actions {
+            width: min(100%, 22rem);
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 8px;
+        }
+
+        #acc,
+        #den {
+            box-sizing: border-box;
+            display: inline-flex;
+            min-height: 46px;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            font-weight: 700;
+            text-decoration: none;
+            touch-action: manipulation;
+        }
+
+        #acc {
+            width: max-content;
+            max-width: none;
+            flex-shrink: 0;
+            white-space: nowrap;
+            overflow-wrap: normal;
+            background: #d83d7b;
+            box-shadow: 0 8px 18px rgba(216, 61, 123, 0.2);
+            transition: background-color 180ms ease, box-shadow 180ms ease, font-size 180ms ease;
+        }
+
+        #acc:hover {
+            background: #c92f6d;
+            box-shadow: 0 11px 22px rgba(216, 61, 123, 0.25);
+        }
+
+        #den {
+            z-index: 2;
+            border-color: rgba(216, 61, 123, 0.28);
+            background: rgba(255, 255, 255, 0.72);
+            color: #b63368;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            12% { transform: scale(1.08); }
+            24% { transform: scale(1); }
+            36% { transform: scale(1.05); }
+            48% { transform: scale(1); }
+        }
+
+        @media (max-width: 600px) {
+            .proposal-title { font-size: 2rem; }
+            .proposal-panel { padding: 20px 16px; }
+            .proposal-actions { gap: 16px; }
+        }
+
+        @media (max-width: 360px) {
+            .proposal-title { font-size: 1.8rem; }
+            .proposal-panel { padding: 16px 12px; }
+        }
+
+        @media (max-height: 500px) and (orientation: landscape) {
+            .proposal-panel { padding-top: 40px; padding-bottom: 24px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .proposal-heart { animation: none; }
+            .plea-message { transition: none; }
+        }
+    </style>
+</head>
+<body>
+    <main class="w-full flex justify-center items-center">
+        <section class="proposal-panel w-full flex justify-center items-center">
+            <div class="w-full flex flex-col justify-center items-center gap-4">
+                <span class="proposal-heart" aria-hidden="true">♥</span>
+                <p class="proposal-eyebrow">A little note</p>
+                <h1 class="proposal-title w-full text-center font-bold">For a girl named Olivta</h1>
+                <p class="proposal-question text-lg text-gray-700">Would you be my Girlfriend?🥺</p>
+                <p id="pleaMessage" class="plea-message" aria-live="polite" aria-atomic="true"></p>
+                <div class="proposal-actions flex justify-center items-center">
+                    <a id="acc" href="accepted.html" class="px-4 py-2 bg-pink-500 text-white rounded hover:bg-pink-600 transition cursor-pointer">Accept</a>
+                    <button id="den" onclick="denied()" class="px-4 py-2 bg-pink-500 text-white rounded hover:bg-pink-600 transition cursor-pointer">Deny</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const acceptButton = document.getElementById('acc');
+        const denyButton = document.getElementById('den');
+        const pleaMessage = document.getElementById('pleaMessage');
+        const pleaMessages = [
+            "Please don't say no... 🥺",
+            "Pretty please? I'll make you smile 💗",
+            "Just give me one chance, please? 🥹",
+            "Please, I really like you 💌",
+            "One tiny yes would make my day ✨",
+            "Could I take you for coffee sometime? ☕",
+            "One date, just to see how it feels? 🌷",
+            "I'll bring snacks and my best jokes 🍓",
+            "I'd love the chance to make you smile 💕",
+            "Pretty please, Olvita? 🥺",
+            "How about a walk and a sweet treat? 🍰",
+            "I'll make us a playlist 🎶",
+            "Could I be your favorite notification? 📱",
+            "I have a tiny crush and a big question 💌",
+            "Please let me show you how much I care 🌸",
+            "Maybe one little date? 💗",
+            "You're my favorite person to ask 🥹",
+            "I promise to save you the best fries 🍟",
+            "I'll cheer for every little thing you do ✨",
+            "One more tiny plea: please? 💖"
+        ];
+        let pleaIndex = 0;
+        let textSize = 1;
+        
+        function accepted() {
+            alert('You accepted the proposal!');
+        };
+
+        function moveDenyButton() {
+            const viewport = window.visualViewport;
+            const width = viewport ? viewport.width : window.innerWidth;
+            const height = viewport ? viewport.height : window.innerHeight;
+            const safeArea = getComputedStyle(document.documentElement);
+            const leftInset = Math.max(12, parseFloat(safeArea.getPropertyValue('--safe-left')) || 0);
+            const rightInset = Math.max(12, parseFloat(safeArea.getPropertyValue('--safe-right')) || 0);
+            const topInset = Math.max(12, parseFloat(safeArea.getPropertyValue('--safe-top')) || 0);
+            const bottomInset = Math.max(12, parseFloat(safeArea.getPropertyValue('--safe-bottom')) || 0);
+            const maxX = Math.max(leftInset, width - denyButton.offsetWidth - rightInset);
+            const maxY = Math.max(topInset, height - denyButton.offsetHeight - bottomInset);
+            const randomX = Math.round(leftInset + Math.random() * (maxX - leftInset));
+            const randomY = Math.round(topInset + Math.random() * (maxY - topInset));
+
+            denyButton.style.position = 'fixed';
+            denyButton.style.left = `${randomX}px`;
+            denyButton.style.top = `${randomY}px`;
+        }
+
+        window.addEventListener('resize', () => {
+            if (denyButton.style.position === 'fixed') {
+                moveDenyButton();
+            }
+        });
+        
+        function denied() {
+            textSize += 1;
+            acceptButton.style.fontSize = `${textSize}rem`;
+            pleaMessage.textContent = pleaMessages[pleaIndex];
+            pleaIndex = (pleaIndex + 1) % pleaMessages.length;
+            pleaMessage.classList.add('visible');
+            moveDenyButton();
+        }
+    </script>
+</body>
+</html>

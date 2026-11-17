@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>MAKACIIHHH 😘</title>
+    <link rel="stylesheet" href="./dist/output.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(to bottom, #fff7fb, #ffe3ef);
+            position: relative;
+            overflow-x: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        main {
+            width: 100%;
+            min-height: 100vh;
+            min-height: 100svh;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .hero-title {
+            max-width: 100%;
+            font-size: 3rem;
+            line-height: 1.12;
+            overflow-wrap: break-word;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at top, rgba(255, 196, 219, 0.55), transparent 45%);
+            pointer-events: none;
+            z-index: 0;
+            animation: glowPulse 6s ease-in-out infinite alternate;
+        }
+
+        main,
+        .letter-wrap,
+        .letter-modal,
+        .love-bubble,
+        .confetti-layer {
+            position: relative;
+            z-index: 1;
+        }
+
+        .letter-wrap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-bottom: 20px;
+        }
+
+        .envelope-button {
+            position: relative;
+            width: 210px;
+            height: 132px;
+            border: 0;
+            background: transparent;
+            cursor: pointer;
+            padding: 0;
+            animation: floatLetter 3.2s ease-in-out infinite;
+        }
+
+        .envelope-shell {
+            position: absolute;
+            inset: 0;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #fff7fb, #ffe3ef);
+            border: 3px solid #f7bfd3;
+            box-shadow: 0 18px 25px rgba(255, 106, 160, 0.18);
+            overflow: hidden;
+        }
+
+        .envelope-shell::before,
+        .envelope-shell::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .envelope-shell::before {
+            background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0));
+            opacity: 0.7;
+        }
+
+        .envelope-shell::after {
+            inset: 12px;
+            border: 2px solid rgba(216, 61, 123, 0.28);
+            border-radius: 14px;
+        }
+
+        .envelope-letter {
+            position: absolute;
+            left: 14px;
+            right: 14px;
+            bottom: 14px;
+            height: 68px;
+            background: rgba(255,255,255,0.9);
+            border: 1px solid rgba(244, 151, 188, 0.7);
+            border-radius: 10px;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.7);
+            z-index: 2;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 58%;
+            background: linear-gradient(135deg, #ffeaf3, #ffcfe0);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transform-origin: top center;
+            transition: transform 0.6s ease;
+            z-index: 3;
+        }
+
+        .envelope-button:hover .envelope-shell {
+            transform: translateY(-3px);
+            box-shadow: 0 22px 35px rgba(255, 106, 160, 0.24);
+        }
+
+        .envelope-button.opened .envelope-flap {
+            transform: rotateX(180deg);
+        }
+
+        .envelope-label {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 4px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #d83d7b;
+            z-index: 4;
+        }
+
+        .envelope-label span:first-child {
+            font-size: 1.7rem;
+            line-height: 1;
+        }
+
+        .envelope-label span:last-child {
+            font-size: 0.72rem;
+        }
+
+        @keyframes floatLetter {
+            0%, 100% {
+                transform: translateY(0) scale(0.985);
+            }
+            50% {
+                transform: translateY(-8px) scale(1.035);
+            }
+        }
+
+        @keyframes glowPulse {
+            0% {
+                opacity: 0.55;
+            }
+            100% {
+                opacity: 0.9;
+            }
+        }
+
+        .letter-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(35, 18, 25, 0.38);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+            overflow-y: auto;
+            box-sizing: border-box;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+            z-index: 50;
+        }
+
+        .letter-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .letter-card {
+            width: min(100%, 630px);
+            max-height: calc(100vh - 40px);
+            max-height: calc(100dvh - 40px);
+            position: relative;
+            border-radius: 28px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,246,250,0.96));
+            border: 1px solid rgba(238, 159, 189, 0.62);
+            box-shadow: 0 30px 80px rgba(78, 24, 53, 0.18);
+            padding: 0;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            opacity: 0;
+            transform: scale(0.94) translateY(18px);
+            transition: opacity 0.32s ease, transform 0.42s cubic-bezier(0.2, 0.75, 0.25, 1);
+            transform-origin: center center;
+        }
+
+        .letter-modal.show .letter-card {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        .letter-paper {
+            position: relative;
+            background: linear-gradient(180deg, #fffdfd 0%, #fff8fb 100%);
+            border-radius: 26px;
+            padding: 18px 20px 26px;
+            box-sizing: border-box;
+            min-height: 280px;
+            box-shadow: inset 0 0 0 1px rgba(230, 143, 178, 0.24);
+        }
+
+        .letter-paper::before {
+            content: "";
+            position: absolute;
+            inset: 12px;
+            border-radius: 18px;
+            border: 1px solid rgba(213, 97, 144, 0.18);
+            pointer-events: none;
+        }
+
+        .letter-paper::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 18px;
+            right: 18px;
+            height: 26px;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(255, 174, 208, 0.15),
+                rgba(255, 174, 208, 0.15) 2px,
+                transparent 2px,
+                transparent 6px
+            );
+            border-radius: 0 0 14px 14px;
+            opacity: 0.9;
+            pointer-events: none;
+        }
+
+        .paper-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 6px;
+            margin-bottom: 10px;
+            padding-right: 44px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .paper-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(255, 231, 240, 0.9);
+            border: 1px solid rgba(221, 96, 146, 0.24);
+            color: #d83d7b;
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .paper-date {
+            color: rgba(122, 93, 105, 0.9);
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .letter-card h2 {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            font-size: clamp(1.5rem, 2vw, 2.2rem);
+            color: #eb478b;
+            font-weight: 800;
+            margin: 0 0 18px;
+            letter-spacing: 0.03em;
+        }
+
+        .letter-body {
+            position: relative;
+            z-index: 2;
+            background: rgba(255,255,255,0.35);
+            border: 1px solid rgba(236, 164, 194, 0.28);
+            border-radius: 16px;
+            padding: 20px 18px;
+        }
+
+        .letter-card p {
+            font-size: 1.08rem;
+            line-height: 1.9;
+            color: #4b4b4b;
+            text-align: center;
+            margin: 0;
+            font-style: normal;
+        }
+
+        .love-bubble {
+            position: fixed;
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2rem;
+            color: #ff5ca8;
+            opacity: 0;
+            animation: fadeHeart 3s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        @keyframes fadeHeart {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, 0) scale(0.8);
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -18px) scale(1.1);
+            }
+        }
+
+        .confetti-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 60;
+        }
+
+        .confetti {
+            position: absolute;
+            top: -10px;
+            width: 10px;
+            height: 16px;
+            opacity: 0.95;
+            border-radius: 3px;
+            animation: confettiFall 3s linear forwards;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate3d(var(--drift), 110vh, 0) rotate(540deg) scale(0.9);
+                opacity: 0;
+            }
+        }
+
+        .floating-hearts {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .float-heart {
+            position: absolute;
+            bottom: -30px;
+            font-size: 1.6rem;
+            color: rgba(255, 92, 168, 0.7);
+            animation: floatUp 8s linear infinite;
+            opacity: 0;
+        }
+
+        .float-heart:nth-child(1) {
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .float-heart:nth-child(2) {
+            left: 24%;
+            font-size: 1.2rem;
+            animation-duration: 10s;
+            animation-delay: 2s;
+        }
+
+        .float-heart:nth-child(3) {
+            top: 34%;
+            right: -30px;
+            bottom: auto;
+            left: auto;
+            color: rgba(255, 126, 177, 0.62);
+            animation: floatFromRight 11s ease-in-out 1.4s infinite;
+        }
+
+        .float-heart:nth-child(4) {
+            top: 65%;
+            bottom: auto;
+            left: -30px;
+            font-size: 1.9rem;
+            color: rgba(235, 71, 139, 0.55);
+            animation: floatFromLeft 10s ease-in-out 3.2s infinite;
+        }
+
+        .float-heart:nth-child(5) {
+            top: -30px;
+            bottom: auto;
+            left: 70%;
+            font-size: 1.3rem;
+            animation: floatDown 12s ease-in-out 0.8s infinite;
+        }
+
+        .float-heart:nth-child(6) {
+            left: 82%;
+            font-size: 1.9rem;
+            color: rgba(255, 126, 177, 0.6);
+            animation: floatSwayUp 9.5s ease-in-out 2.5s infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(0.8);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-105vh) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes floatFromRight {
+            0% {
+                transform: translateX(0) translateY(0) scale(0.7) rotate(12deg);
+                opacity: 0;
+            }
+            18% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateX(-115vw) translateY(-45px) scale(1.15) rotate(-18deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes floatFromLeft {
+            0% {
+                transform: translateX(0) translateY(0) scale(0.75) rotate(-14deg);
+                opacity: 0;
+            }
+            18% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateX(115vw) translateY(-75px) scale(1.2) rotate(20deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes floatDown {
+            0% {
+                transform: translateY(0) translateX(0) scale(0.75) rotate(0deg);
+                opacity: 0;
+            }
+            18% {
+                opacity: 0.65;
+            }
+            100% {
+                transform: translateY(110vh) translateX(-55px) scale(1.1) rotate(28deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes floatSwayUp {
+            0% {
+                transform: translateY(0) translateX(0) scale(0.75);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.75;
+            }
+            55% {
+                transform: translateY(-55vh) translateX(-28px) scale(1);
+            }
+            100% {
+                transform: translateY(-110vh) translateX(24px) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .mood-badge {
+            position: fixed;
+            top: max(20px, env(safe-area-inset-top));
+            right: max(22px, env(safe-area-inset-right));
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 126, 177, 0.4);
+            color: #d83d7b;
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            box-shadow: 0 10px 20px rgba(216, 61, 123, 0.08);
+            backdrop-filter: blur(4px);
+            animation: badgePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .close-button {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            border: none;
+            background: #ffe4ee;
+            color: #d43c73;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 3;
+            box-shadow: 0 8px 16px rgba(214, 82, 133, 0.12);
+        }
+
+        @media (max-width: 480px) {
+            .letter-modal {
+                padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+            }
+
+            .letter-card {
+                max-height: calc(100vh - 24px);
+                max-height: calc(100dvh - 24px);
+                border-radius: 22px;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+                line-height: 1.15;
+            }
+
+            .letter-paper {
+                padding: 16px 14px 20px;
+                border-radius: 20px;
+            }
+
+            .letter-body {
+                padding: 16px 12px;
+            }
+
+            .letter-card p {
+                font-size: 1rem;
+                line-height: 1.75;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-height: 500px) and (orientation: landscape) {
+            main {
+                align-items: flex-start;
+            }
+
+            main > section {
+                padding-top: 2.5rem;
+                padding-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="w-full flex justify-center items-center">
+        <section class="w-full px-6 flex flex-col justify-center items-center gap-6">
+            <div class="w-full flex flex-col justify-center items-center gap-4 text-center">
+                <h1 class="hero-title text-center mb-3 font-bold text-pink-500" data-aos="fade-up" data-aos-duration="3000" data-aos-easing="linear">Thank you for accepting, Olvita!</h1>
+                <p class="text-lg md:text-xl text-center text-gray-700 mb-0" data-aos="fade-up" data-aos-duration="3000" data-aos-delay="800" data-aos-easing="linear">I am so happy that you said yes🥹. I promise to love you forever!</p>
+            </div>
+
+            <div class="letter-wrap" data-aos="zoom-in-up" data-aos-delay="1200">
+                <button id="openLetter" class="envelope-button" type="button" aria-label="Open letter">
+                    <span class="envelope-shell">
+                        <span class="envelope-flap"></span>
+                        <span class="envelope-letter"></span>
+                        <span class="envelope-label">
+                            <span>✉</span>
+                            <span>Open Letter</span>
+                        </span>
+                    </span>
+                </button>
+            </div>
+
+            <audio id="mySong" src="./src/Song.mp3" preload="auto"></audio>
+        </section>
+    </main>
+
+    <div id="letterModal" class="letter-modal" aria-hidden="true">
+        <div class="letter-card">
+            <div class="letter-paper">
+                <button id="closeLetter" class="close-button" type="button">✕</button>
+
+                <div class="paper-header">
+                    <span class="paper-tag">For You</span>
+                    <span class="paper-date">Olivta</span>
+                </div>
+
+                <h2>This Is For You</h2>
+
+                <div class="letter-body">
+                    <p>
+                        pit, u tau kan kalo i suka sama u dan i sebenernya takut banget buat confes, takut u nolak. Umm... kalau u gak keberatan, mau ngga minggu kita mulai jalan?
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mood-badge">Love Mode</div>
+    <div class="love-bubble" aria-hidden="true">♥</div>
+    <div class="floating-hearts" aria-hidden="true">
+        <span class="float-heart">♥</span>
+        <span class="float-heart">♡</span>
+        <span class="float-heart">♥</span>
+        <span class="float-heart">♡</span>
+        <span class="float-heart">♥</span>
+        <span class="float-heart">♡</span>
+    </div>
+    <div class="confetti-layer" aria-hidden="true"></div>
+
+    <script>
+        const openLetter = document.getElementById('openLetter');
+        const closeLetter = document.getElementById('closeLetter');
+        const letterModal = document.getElementById('letterModal');
+        const loveBubble = document.querySelector('.love-bubble');
+        const confettiLayer = document.querySelector('.confetti-layer');
+
+        function triggerLoveBubble() {
+            loveBubble.style.animation = 'none';
+            void loveBubble.offsetWidth;
+            loveBubble.style.animation = 'fadeHeart 3s ease-in-out infinite';
+        }
+
+        function launchConfetti() {
+            const colors = ['#ff4d8d', '#ff9ec4', '#ffd166', '#ff7aa2', '#ffc2d1', '#c77dff'];
+
+            for (let i = 0; i < 28; i++) {
+                const piece = document.createElement('span');
+                piece.className = 'confetti';
+                piece.style.left = `${Math.random() * 100}%`;
+                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.setProperty('--drift', `${(Math.random() * 200 - 100).toFixed(2)}px`);
+                piece.style.animationDuration = `${(2.4 + Math.random() * 1.5).toFixed(2)}s`;
+                piece.style.animationDelay = `${(Math.random() * 0.5).toFixed(2)}s`;
+                confettiLayer.appendChild(piece);
+                setTimeout(() => piece.remove(), 3800);
+            }
+        }
+
+        openLetter.addEventListener('click', () => {
+            openLetter.classList.add('opened');
+            triggerLoveBubble();
+            launchConfetti();
+
+            setTimeout(() => {
+                letterModal.classList.add('show');
+                letterModal.setAttribute('aria-hidden', 'false');
+            }, 250);
+        });
+
+        closeLetter.addEventListener('click', () => {
+            openLetter.classList.remove('opened');
+            letterModal.classList.remove('show');
+            letterModal.setAttribute('aria-hidden', 'true');
+        });
+
+        letterModal.addEventListener('click', (e) => {
+            if (e.target === letterModal) {
+                openLetter.classList.remove('opened');
+                letterModal.classList.remove('show');
+                letterModal.setAttribute('aria-hidden', 'true');
+            }
+        });
+
+        window.onload = function() {
+            launchConfetti();
+
+            const song = document.getElementById('mySong');
+
+            song.play().catch(() => {
+                document.body.addEventListener('click', () => {
+                    song.play();
+                }, { once: true });
+            });
+        };
+    </script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+</body>
+</html>
